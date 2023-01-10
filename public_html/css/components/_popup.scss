@@ -1,0 +1,15 @@
+.popup {
+    width: 40rem;
+    height: max-content;
+    padding: 2.4rem 1.6rem;
+    background-color: var(--color-grey-1);
+    color: #fff;
+    border-radius: 1.2rem;
+    font-size: 1.6rem;
+    text-align: center;
+
+    position: absolute;
+    top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+}

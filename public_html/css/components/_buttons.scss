@@ -1,0 +1,76 @@
+.btn {
+    display: block;
+    cursor: pointer;
+    height: 6rem;
+    width: max-content;
+    font-size: 1.6rem;
+    border-radius: 1.2rem;
+    transition: all .2s;
+    text-decoration: none;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .8rem;
+    font-weight: 500;
+
+    & svg {
+        width: 1.8rem;
+        height: 1.8rem;
+    }
+
+    &__sec {
+        background-color: var(--color-grey-5);
+        color: var(--color-grey-2);
+
+        &:hover {
+            background-color: var(--color-grey-4);
+        }
+    }
+
+    &__prim {
+        background-color: var(--color-grey-1);
+        color: #fff;
+        
+        &:hover {
+            background-color: var(--color-grey-2);
+        }
+    }
+
+    &__red {
+        background-color: #981818;
+        color: #fff;
+        
+        &:hover {
+            background-color: #a02323;
+        }
+    }
+
+    &--f {
+        width: 100%;
+    }
+}
+
+.btn-chip {
+    width: max-content;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 10rem;
+    padding: 1.2rem 2.4rem;
+    background-color: var(--color-grey-5);
+    color: var(--color-grey-2);
+    font-size: 1.4rem;
+
+    &:hover {
+        background-color: var(--color-grey-4);
+    }
+
+    &.active {
+        background-color: var(--color-grey-1);
+        color: #fff;
+
+        &:hover {
+            background-color: var(--color-grey-2);
+        }
+    }
+}

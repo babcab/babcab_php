@@ -1,0 +1,112 @@
+.table__users {
+    min-width: 786px;
+    height: max-content;
+    margin: 2.4rem 0;
+
+    &__h {
+        height: 6rem;
+        background-color: var(--color-grey-1);
+        color: #fff;
+        font-size: 1.4rem;
+        font-weight: 500;
+        border-radius: 1.2rem;
+        margin-bottom: 1rem;
+
+        display: grid;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    &--link {
+        width: 100%;
+        height: 100%;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        & svg {
+            width: 2rem;
+            height: 2rem;
+
+            & path {
+                stroke: var(--color-prim-1);
+            }
+        }
+    }
+
+    &__b {
+        width: 100%;
+        height: 100%;
+
+        & .notfound {
+            text-align: center;
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: var(--color-grey-2);
+            margin-top: 2.4rem;
+        }
+
+        &--rows {
+            min-height: 6rem;
+            color: var(--color-grey-2);
+            font-size: 1.4rem;
+            padding: .5rem 1px;
+            text-decoration: none;
+            border-radius: 1.2rem;
+
+            display: grid;
+            gap: 1rem;
+            align-items: center;
+
+            &:nth-child(even) {
+                background-color: var(--color-grey-6);
+            }
+
+            &:hover {
+                background-color: var(--color-grey-5);
+            }
+        }
+
+        &--el {
+            color: var(--color-grey-2);
+
+            &.i{
+                color: var(--color-grey-1);
+                font-weight: 600;
+            }
+        }
+    }
+
+    &__h--el, &__b--el{
+        padding: 0 2.4rem;
+    }
+
+    &__h, &__b--rows{
+        grid-template-columns: 2fr 1fr 1fr 2fr 2fr;
+    }
+
+}
+
+.table__pagination {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+
+    & a {
+        padding: 1.2rem 1.6rem;
+        border-radius: 4px;
+        background-color: var(--color-grey-5);
+        color: var(--color-grey-1);
+
+        display: block;
+        text-decoration: none;
+        font-size: 1.4rem;
+        cursor: pointer;
+
+        &.active {
+            background-color: var(--color-grey-1);
+            color: #fff;
+        }
+    }
+}

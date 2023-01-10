@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700;800;900&display=swap');
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+    font-size: 62.5%;
+    font-family: 'Inter', sans-serif;
+    scroll-behavior: smooth;
+
+    @include respond(tab-land-3) {    //width <   1200px?
+        font-size: 56.25%;  //1rem = 9px    9/16
+    }
+
+    @include respond(tab-land) {    //width <   1200px?
+        font-size: 53.12%;  //1rem = 9px    9/16
+    }
+
+    @include respond(tab-land-2) {    //width <   1200px?
+        font-size: 50%;  //1rem = 9px    9/16
+    }
+    
+    @include respond(tab-port) {    //width <   900px?
+        font-size: 43.75%;     //1rem = 8px    8/16
+    }
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+.main-wrapper {
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-grey-6);
+
+    &__center {
+        display: flex;
+        justify-content: center;
+        align-items: center;        
+    }
+}
+
+.section-home {
+    display: grid;
+    grid-template-columns: 25rem 1fr;
+
+    &__wrapper {
+        display: grid;
+        grid-template-columns: minmax(0, 120rem);
+        justify-content: center;
+        
+        overflow-y: scroll;
+
+        @include respond (tab-port) {
+            overflow-y: auto;
+        }
+    }
+
+    @include respond (tab-port) {
+        display: flex;
+
+        &__wrapper {
+            width: 100%;
+        }
+    }
+}
