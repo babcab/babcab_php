@@ -1,0 +1,25 @@
+{
+    "checkPoints": [
+        {
+            "lat": "2325323525",
+            "lng": "-52523453",
+            "city": "City Name",
+            "country": "Country name"
+        },
+        {
+            "lat": "2325323525",
+            "lng": "-52523453",
+            "city": "City Name",
+            "country": "Country name"
+        },
+        {
+            "lat": "2325323525",
+            "lng": "-52523453",
+            "city": "City Name",
+            "country": "Country name"
+        }
+    ],
+    "seats": "2",
+    "price": "2342",
+    "timming": "327209635"
+}

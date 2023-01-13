@@ -5,6 +5,7 @@ import Signup from './view/signup';
 import Login from './view/login';
 import Sidebar from './view/sidebar.js';
 import tableUsers from './view/tableUsers';
+import AddRide from './view/addRide';
 
 const signupFormCont = document.getElementById("signup-form");
 const loginFormCont = document.getElementById("login-form");
@@ -24,3 +25,5 @@ if (sideNav) {
 }
 
 if (tableUsercont) new tableUsers();
+
+if (document.querySelector(".section-addride")) new AddRide();

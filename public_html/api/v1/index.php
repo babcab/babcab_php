@@ -38,13 +38,13 @@ $data = json_decode(file_get_contents("php://input"));
 try {
 
     require_once './controller/user.php';
-    require_once './controller/testing.php';
-
+    require_once './controller/ride.php';
+    
 
 
 
     $errorCode = 400;
-    throw new Exception('Access Denied!');
+    throw new Exception('bad request!');
 
 } catch (Exception $ex) {
     $errorCode = empty($errorCode) ? 500 : $errorCode;

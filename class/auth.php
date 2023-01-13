@@ -26,7 +26,7 @@ class Auth {
 
 
             if (isset($this->decodedData->data)) {
-                $this->role = $this->decodedData->data->role == $this->getenv['ADMIN'] ? 'admin' : 'user';
+                $this->role = $this->decodedData->data->role;
                 $this->loggedIn = true;
             }
 

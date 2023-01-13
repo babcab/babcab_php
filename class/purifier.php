@@ -59,19 +59,28 @@ class Purifier {
 
     public function filterText () {
         try {
-            if ($this->obj['type'] == 'string') {
+            $objType = $this->obj['type'];
+            if ($objType == 'string') {
                 $this->value = filter_var($this->value, FILTER_SANITIZE_STRING);
-            } else if ($this->obj['type'] == 'int') {
+
+            } else if ($objType == 'int') {
                 $this->value = filter_var($this->value, FILTER_VALIDATE_INT);
-            } else if ($this->obj['type'] == 'password') {
+            } else if ($objType == 'double') {
+                $this->value = filter_var($this->value, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+            } else if ($objType == 'password') {
                 if (strlen($this->value) < 8 || strlen($this->value) > 12) {
                     $this->value = false;
                 } else {
                     $this->value = password_hash($this->value, PASSWORD_DEFAULT);
                 }
-            } else if ($this->obj['type'] == 'email') {
+            } else if ($objType == 'email') {
                 $this->value = filter_var($this->value, FILTER_VALIDATE_EMAIL);
+            } else if ($objType == 'time') {
+
+                if (!$this->isValidTimeStamp($this->value)) throw new Exception ("Time stamp is not valid!");
+                
             }
+
 
             if (!$this->value) throw new Exception ($this->obj['valMsg']);
 
@@ -81,6 +90,13 @@ class Purifier {
         } catch (Exception $ex) {
             throw new Exception ($ex->getMessage());
         }
+    }
+
+    public function isValidTimeStamp($date_time_string) {
+        if(preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$/", $date_time_string)) {
+            return true;
+        }
+        return false;
     }
 
     public function sanitizeString($data) {
