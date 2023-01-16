@@ -10,7 +10,7 @@ $purifierObj = new Purifier ($data);
 if ($uri == '/create-user') {
     if ($_SERVER["REQUEST_METHOD"] != 'POST') throw new Exception ('Bad Request!');
     
-    $valuesArr = ['graduated', 'name', 'email', 'password', 'phoneNumber', 'college', 'address', 'city', 'pincode', 'role'];
+    $valuesArr = ['graduated', 'name', 'vehicle', 'vehicle_no', 'email', 'password', 'phoneNumber', 'college', 'address', 'city', 'pincode', 'role'];
 
     foreach($valuesArr as $el) {
         $filteredObj[$el] = $purifierObj->start($userFields[$el]);
@@ -19,15 +19,31 @@ if ($uri == '/create-user') {
     $userObj->data = $filteredObj;
  
     // Check if Phone Or email already Exists
-    if ($userObj->alreadyExists('phoneNumber') || $userObj->alreadyExists('email')) throw new Exception ("Phone number or Email already in use");
-    
+    if ($userObj->alreadyExist('email') || $userObj->alreadyExist('phoneNumber')) throw new Exception ("Phone number or Email already in use");
+    if ($userObj->alreadyExist('vehicle_no'))throw new Exception ("Vehicle already in use");
+
     if ($userObj->create()) {
-        responseWithoutData(200, "User created successfully!");
+        $userData = $userObj->getByEmail($filteredObj['email']);
+
+        $userObj->id = $userData[0]['id'];
+        $userObj->name = $userData[0]['name'];
+        $userObj->email = $userData[0]['email'];
+        $userObj->role = $userData[0]['role'];
+        $userObj->graduated = $userData[0]['graduated'];
+        $jwt = $userObj->generateJWT($getenv);
+
+        setcookie('token', $jwt,  time() + (86400 * $getenv["JWT_COOKIE_EXPIRES_IN"]), '/');
+
+        responseMsgAndData ('User created successfully!', array(
+            "token" => $jwt 
+        ));
         die();
     }
 
     responseWithoutData(200, "Something went wrong, try again!");
     die();
+
+
 } else if ($uri == '/login') {
     if ($_SERVER["REQUEST_METHOD"] != 'POST') throw new Exception ('Bad Request!');
 
@@ -41,12 +57,12 @@ if ($uri == '/create-user') {
 
     $userData = $userObj->getByEmail($filteredObj['email']);
 
-    if (empty($userData) || !password_verify($data->password, $userData[0]['user_password'])) throw new Exception ("Email or Password is incorrect!");
+    if (empty($userData) || !password_verify($data->password, $userData[0]['password'])) throw new Exception ("Email or Password is incorrect!");
     
     $userObj->id = $userData[0]['id'];
-    $userObj->name = $userData[0]['user_name'];
-    $userObj->email = $userData[0]['user_email'];
-    $userObj->role = $userData[0]['user_role'];
+    $userObj->name = $userData[0]['name'];
+    $userObj->email = $userData[0]['email'];
+    $userObj->role = $userData[0]['role'];
     $userObj->graduated = $userData[0]['graduated'];
     
     $jwt = $userObj->generateJWT($getenv);
@@ -76,18 +92,7 @@ if ($uri == '/create-user') {
     $userData = $userObj->get($userTokenData->id)[0];
 
     if (!empty($userData)) {
-        responseWithData(array(
-            "id" => $userData['id'],
-            "userName" => $userData['user_name'],
-            "role" => $userData['user_role'],
-            "phoneNumber" => $userData['user_phoneNumber'],
-            "email" => $userData['user_email'],
-            "college" => $userData['user_college'],
-            "graduated" => $userData['graduated'],
-            "address" => $userData['user_address'],
-            "city" => $userData['user_city'],
-            "pincode" => $userData['user_pincode'],
-        ));
+        responseWithData($userData);
         die();
     }
 
@@ -108,7 +113,7 @@ if ($uri == '/create-user') {
         $filteredObj[$el] = isset($data->{$el}) ? $purifierObj->start($userFields[$el]) : $userData[$userFields[$el]['sql']];
     }
 
-    $filteredObj['id'] = $userId;
+    $filteredObj['id'] = $userData['id'];
     $userObj->data = $filteredObj;
 
     if ($userObj->update()) {
@@ -163,7 +168,7 @@ if ($uri == '/create-user') {
     $filteredObj['phoneNumber'] = $purifierObj->start($userFields['phoneNumber']);
     $userObj->data = $filteredObj;
 
-    if ($userObj->alreadyExists('phoneNumber')) {
+    if ($userObj->alreadyExist('phoneNumber')) {
         responseWithData(array("phoneNumberExist" => true));
         die();
     }

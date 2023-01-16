@@ -458,7 +458,7 @@ body {
   padding: 0 2.4rem;
 }
 .table__users__h, .table__users__b--rows {
-  grid-template-columns: 2fr 1fr 1fr 2fr 2fr;
+  grid-template-columns: 15rem 10rem 10rem 10rem 1fr 2fr 2fr;
 }
 
 .table__pagination {

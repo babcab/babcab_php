@@ -35,11 +35,11 @@ class User {
 
     public function create () {
         try {
-            $query = "INSERT INTO ".$this->tbName." set user_name = ?, user_phoneNumber = ?, user_password = ?, user_email = ?, user_college = ?, graduated = ?, user_address = ?, user_city = ?, user_pincode = ?, user_role = ?";
+            $query = "INSERT INTO ".$this->tbName." set name = ?, vehicle = ?, vehicle_no = ?, phone_no = ?, password = ?, email = ?, college = ?, graduated = ?, address = ?, city = ?, pincode = ?, role = ?";
             
             $obj = $this->conn->prepare($query);
 
-            $obj->bind_param("sssssissis", $this->data['name'], $this->data['phoneNumber'], $this->data['password'], $this->data['email'], $this->data['college'], $this->data['graduated'], $this->data['address'], $this->data['city'], $this->data['pincode'], $this->data['role']);
+            $obj->bind_param("sssssssissis", $this->data['name'], $this->data['vehicle'], $this->data['vehicle_no'], $this->data['phoneNumber'], $this->data['password'], $this->data['email'], $this->data['college'], $this->data['graduated'], $this->data['address'], $this->data['city'], $this->data['pincode'], $this->data['role']);
             
             if ($obj->execute()) {
                 return true;
@@ -53,7 +53,8 @@ class User {
 
     public function get ($id) {
         try {
-            $query = "SELECT * from ".$this->tbName." WHERE id = ?";
+            $query = "SELECT id, name, vehicle, vehicle_no, role, phone_no, email, college, graduated, address, city, pincode
+            from ".$this->tbName." WHERE id = ?";
             
             $obj = $this->conn->prepare($query);
 
@@ -73,6 +74,28 @@ class User {
         }
     }
 
+    public function alreadyExist ($field = 'id') {
+        try {
+            $query = "SELECT id
+            from ".$this->tbName." WHERE ".$this->table[$field]['sql']." = ?";
+            
+            $obj = $this->conn->prepare($query);
+    
+            $obj->bind_param($this->charType[$this->table[$field]['type']], $this->data[$field]);
+            
+            if ($obj->execute()) {
+                $data = $obj->get_result();
+    
+    
+                return  $data->num_rows < 1 ? false : true;
+            }
+
+            return false; 
+        } catch (Exception $ex) {
+            throw new Exception ($ex->getMessage());
+        }
+    }
+
     public function gets () {
         $limit = $this->conditions['limit'];
         $offset = ($this->conditions['currPage'] - 1) * $limit;
@@ -82,22 +105,22 @@ class User {
         try {
             if ($limit == -1) {
                 if (empty($role)) {
-                    $query = "SELECT id, user_name, user_role, user_phoneNumber, user_email, user_college, graduated, user_address, user_city, user_pincode
+                    $query = "SELECT id, name, vehicle, vehicle_no, role, phone_no, email, college, graduated, address, city, pincode
                     from ".$this->tbName."
-                    ORDER BY id DESC";  
+                    ORDER BY id DESC";
                 } else {
-                    $query = "SELECT id, user_name, user_role, user_phoneNumber, user_email, user_college, graduated, user_address, user_city, user_pincode
-                    from ".$this->tbName." WHERE user_role = ?
+                    $query = "SELECT id, name, vehicle, vehicle_no, role, phone_no, email, college, graduated, address, city, pincode
+                    from ".$this->tbName." WHERE role = ?
                     ORDER BY id DESC";  
                 }
             } else {
                 if (empty($role)) {
-                    $query = "SELECT id, user_name, user_role, user_phoneNumber, user_email, user_college, graduated, user_address, user_city, user_pincode
+                    $query = "SELECT id, name, vehicle, vehicle_no, role, phone_no, email, college, graduated, address, city, pincode
                     from ".$this->tbName."
                     ORDER BY id DESC LIMIT {$offset}, {$limit}";  
                 } else {
-                    $query = "SELECT id, user_name, user_role, user_phoneNumber, user_email, user_college, graduated, user_address, user_city, user_pincode
-                    from ".$this->tbName."  WHERE user_role = ?
+                    $query = "SELECT id, name, vehicle, vehicle_no, role, phone_no, email, college, graduated, address, city, pincode
+                    from ".$this->tbName."  WHERE role = ?
                     ORDER BY id DESC LIMIT {$offset}, {$limit}";  
                 }
             }
@@ -133,7 +156,7 @@ class User {
             if (empty($role)) {
                 $query = "SELECT COUNT(id) as total from ".$this->tbName;
             } else {
-                $query = "SELECT COUNT(id) as total from ".$this->tbName." WHERE user_role = ?";
+                $query = "SELECT COUNT(id) as total from ".$this->tbName." WHERE role = ?";
             }
             
             $obj = $this->conn->prepare($query);
@@ -157,7 +180,7 @@ class User {
 
     public function getByEmail ($email) {
         try {
-            $query = "SELECT * from ".$this->tbName." WHERE user_email = ?";
+            $query = "SELECT * from ".$this->tbName." WHERE email = ?";
             
             $obj = $this->conn->prepare($query);
 
@@ -204,7 +227,7 @@ class User {
 
     public function update () {
         try {
-            $query = "UPDATE ".$this->tbName."  set user_name = ?, graduated = ?, user_address = ?, user_city = ?, user_pincode = ? WHERE id = ?";
+            $query = "UPDATE ".$this->tbName."  set name = ?, graduated = ?, address = ?, city = ?, pincode = ? WHERE id = ?";
 
             $obj = $this->conn->prepare($query);
 
@@ -232,25 +255,6 @@ class User {
         }
 
         return false;
-    }
-
-    public function alreadyExists ($name) {
-        try {
-            $query = "SELECT * FROM ".$this->tbName." WHERE ".$this->table[$name]['sql']." = ?";
-            $obj = $this->conn->prepare($query);
-
-            $obj->bind_param($this->charType[$this->table[$name]['type']], $this->data[$name]);
-
-            if($obj->execute()) {
-                $data = $obj->get_result();
-
-                return  $data->num_rows < 1 ? false : true;
-            }
-
-            return false; 
-        } catch (Exception $ex) {
-            throw new Exception ($ex->getMessage());
-        }
     }
 
     public function generateJWT ($getenv) {

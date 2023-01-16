@@ -34,6 +34,8 @@ include $rootDir.'/includes/redirectuser.php';
                 <div class="table__users__h">
                     <div class="table__users__h--el">Name</div>
                     <div class="table__users__h--el">Role</div>
+                    <div class="table__users__h--el">Vehicle</div>
+                    <div class="table__users__h--el">Vehicle no.</div>
                     <div class="table__users__h--el">City</div>
                     <div class="table__users__h--el">Email</div>
                     <div class="table__users__h--el">Phone no.</div>

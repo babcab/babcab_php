@@ -41,4 +41,26 @@ function filter_text ($data) {
     return $data;
 }
 
+function generateCombination ($arr) {
+    $tempArr = [];
+    for($i = 0; $i < sizeof($arr); $i++) {
+        for ($j = $i; $j < sizeof($arr); $j++) {
+            if ($i > 0 && $i == $j) {
+                // Skip
+            } else {
+                if (!(sizeof($tempArr) < 1)) {
+                    $lastElment = $tempArr[sizeof($tempArr)-1];
+                    $x = $arr[$i]."-".$arr[$j];
+
+                    if ($lastElment != $x) array_push($tempArr, $x);
+
+                } else {
+                    array_push($tempArr,  $arr[$i]."-".$arr[$j]);
+                }
+            }
+        }
+    }
+    return $tempArr;
+}
+
 ?>

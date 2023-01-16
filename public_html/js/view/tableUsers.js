@@ -32,6 +32,7 @@ class TableUsers {
                 url: `/api/v1/get-all-user?limit=${this.limit}&currPage=${this.currPage}&role=${this.role}`
             });
 
+            console.log(res.data);
             this.data = res.data.data;
             this.renderData();
         } catch (err) {
@@ -47,11 +48,13 @@ class TableUsers {
             markup = this.data.users.map(el => {
                 return `
                     <a href="/users.php?id=${el.id}" class="table__users__b--rows">
-                        <div class="table__users__b--el">${this.capitalizeFirstLetter(el.user_name)}</div>
-                        <div class="table__users__b--el i">${this.capitalizeFirstLetter(el.user_role == 'both' ? 'Driver & Ryder' : el.user_role )}</div>
-                        <div class="table__users__b--el">${this.capitalizeFirstLetter(el.user_city)}</div>
-                        <div class="table__users__b--el">${el.user_email}</div>
-                        <div class="table__users__b--el">${el.user_phoneNumber}</div>
+                        <div class="table__users__b--el">${this.capitalizeFirstLetter(el.name)}</div>
+                        <div class="table__users__b--el i">${this.capitalizeFirstLetter(el.role == 'both' ? 'Driver & Ryder' : el.role )}</div>
+                        <div class="table__users__b--el">${this.capitalizeFirstLetter(el.vehicle)}</div>
+                        <div class="table__users__b--el">${el.vehicle_no}</div>
+                        <div class="table__users__b--el">${this.capitalizeFirstLetter(el.city)}</div>
+                        <div class="table__users__b--el">${el.email}</div>
+                        <div class="table__users__b--el">${el.phone_no}</div>
                     </a>
                 `;
             }).join('');

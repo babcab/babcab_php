@@ -4,7 +4,7 @@ require_once "$rootDir/../class/ride.php";
 require_once "$rootDir/../table/ride.php";
 
 // Creating objects
-$rideObj = new Ride ($conn);
+$rideObj = new Ride ($conn, $rideFields);
 $purifierObj = new Purifier ($data);
 
 if ($uri == '/create-ride') {
@@ -12,7 +12,7 @@ if ($uri == '/create-ride') {
 
     if (!$isLoggedIn || !in_array($userRole, ['driver', 'admin', 'both'])) throw new Exception ("Access Denied!");
 
-    $valArr = ['seats', 'price', 'time', 'vehicle'];
+    $valArr = ['seats', 'price', 'time'];
     foreach($valArr as $el) {
         $filteredObj[$el] = $purifierObj->start($rideFields[$el]);
     }
@@ -43,30 +43,6 @@ if ($uri == '/create-ride') {
         array_push($country, $tempCountry);
     }
 
-
-
-    function generateCombination ($arr) {
-        $tempArr = [];
-        for($i = 0; $i < sizeof($arr); $i++) {
-            for ($j = $i; $j < sizeof($arr); $j++) {
-                if ($i > 0 && $i == $j) {
-                    // Skip
-                } else {
-                    if (!(sizeof($tempArr) < 1)) {
-                        $lastElment = $tempArr[sizeof($tempArr)-1];
-                        $x = $arr[$i]."-".$arr[$j];
-
-                        if ($lastElment != $x) array_push($tempArr, $x);
-
-                    } else {
-                        array_push($tempArr,  $arr[$i]."-".$arr[$j]);
-                    }
-                }
-            }
-        }
-        return $tempArr;
-    }
-
     $rideObj->cities = join(" | ", generateCombination($cities));
     $rideObj->states = join(" | ", generateCombination($state));
     $rideObj->countries = join(" | ", generateCombination($country));
@@ -74,7 +50,6 @@ if ($uri == '/create-ride') {
     $rideObj->timeStamp = $filteredObj['time'];
     $rideObj->seats = $filteredObj['seats'];
     $rideObj->price = $filteredObj['price'];
-    $rideObj->vehicle = $filteredObj['vehicle'];
     $rideObj->driver_id = $userTokenData->id;
 
     if ($rideObj->createRide()) {
@@ -140,6 +115,30 @@ if ($uri == '/create-ride') {
 
     responseWithoutData(500, "Something went wrong, try again!");
     
+    die();
+}  else if ($uri == '/update-ride') {
+    if ($_SERVER["REQUEST_METHOD"] != 'POST') throw new Exception ('Bad Request!');
+    if (empty($data)) throw new Exception ('Fields are required');
+    if (!$isLoggedIn) throw new Exception ('Access Denied!');
+
+    $rideObj->postData['id'] = $purifierObj->start($rideFields['id']);
+    $oldRideData = $rideObj->getBy('id')[0];
+
+    $valuesArr = ['seats'];
+
+    foreach($valuesArr as $el) {
+        $filteredObj[$el] = isset($data->{$el}) ? $purifierObj->start($rideFields[$el]) : $oldRideData[$rideFields[$el]['sql']];
+    }
+
+    $filteredObj['id'] = $oldRideData['id'];
+    $rideObj->data = $filteredObj;
+    
+    if ($rideObj->updateRide()) {
+        responseWithoutData(200, "Ride updated successfully!");
+        die();
+    }
+
+    responseWithoutData(500, "Something went wrong, try again!");
     die();
 }
 

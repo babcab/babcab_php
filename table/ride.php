@@ -1,5 +1,14 @@
 <?php
 $rideFields = array (
+    "id" => array(
+        "name" => "id",
+        "sql" => "id",
+        "type" => 'int',
+        "msg" => "Id is required!",
+        "valMsg" => "Id is invalid!",
+        "null" => false,
+        "lwCase" => false
+    ),
     "price" => array(
         "name" => "price",
         "sql" => "id",
@@ -11,7 +20,7 @@ $rideFields = array (
     ),
     "seats" => array(
         "name" => "seats",
-        "sql" => "id",
+        "sql" => "seats",
         "type" => 'int',
         "msg" => "Seats is required!",
         "valMsg" => "Seats is invalid!",

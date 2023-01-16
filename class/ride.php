@@ -10,13 +10,23 @@ class Ride {
     public $vehicle;
     public $driver_id;
     public $rider_id;
+    public $postData = [];
 
     private $tbName = 'rides';
     private $joinRideTb = 'join_rides';
     private $conn;
 
-    public function __construct ($db) {
+    public $charType = [
+        "int" => "i",
+        "string" => "s",
+        "boolean" => "i",
+        "email" => "s",
+        "password" => "s",
+    ];
+
+    public function __construct ($db, $table) {
         $this->conn = $db;
+        $this->table = $table;
     }
 
     public function createRide () {
@@ -61,6 +71,24 @@ class Ride {
             }
 
             return array();
+        } catch (Exception $ex) {
+            throw new Exception ($ex->getMessage());
+        }
+    }
+
+    public function updateRide () {
+        try {
+            $query = "UPDATE ".$this->tbName."  set seats = ? WHERE id = ?";
+
+            $obj = $this->conn->prepare($query);
+
+            $obj->bind_param("si", $this->data['seats'], $this->data['id']);
+            
+            if ($obj->execute()) {
+                return true;
+            }
+
+            return false;
         } catch (Exception $ex) {
             throw new Exception ($ex->getMessage());
         }
@@ -128,6 +156,33 @@ class Ride {
         } catch (Exception $ex) {
             throw new Exception ($ex->getMessage());
         } 
+    }
+
+    public function getBy ($fieldName) {
+        try {
+            $query = "SELECT *
+            from ".$this->tbName." WHERE ".$this->table[$fieldName]['sql']." = ?";
+            
+            $obj = $this->conn->prepare($query);
+
+            $obj->bind_param("i", $id);
+            $obj->bind_param($this->charType[$this->table[$fieldName]['type']], $this->postData[$fieldName]);
+
+            
+            if ($obj->execute()) {
+                $data = $obj->get_result();
+
+                $this->fetchData ($data);
+
+                if (empty($this->data)) throw new Exception ("No ride found!");
+
+                return $this->data;
+            }
+            
+            return array();
+        } catch (Exception $ex) {
+            throw new Exception ($ex->getMessage());
+        }
     }
 
     public function fetchData ($data) {

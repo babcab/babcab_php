@@ -21948,18 +21948,19 @@ var TableUsers = /*#__PURE__*/function () {
               });
             case 3:
               res = _context.sent;
+              console.log(res.data);
               this.data = res.data.data;
               this.renderData();
-              _context.next = 10;
+              _context.next = 11;
               break;
-            case 8:
-              _context.prev = 8;
+            case 9:
+              _context.prev = 9;
               _context.t0 = _context["catch"](0);
-            case 10:
+            case 11:
             case "end":
               return _context.stop();
           }
-        }, _callee, this, [[0, 8]]);
+        }, _callee, this, [[0, 9]]);
       }));
       function getData() {
         return _getData.apply(this, arguments);
@@ -21975,7 +21976,7 @@ var TableUsers = /*#__PURE__*/function () {
         markup = '<p class="p__4 p__r notfound">No Data found</p>';
       } else {
         markup = this.data.users.map(function (el) {
-          return "\n                    <a href=\"/users.php?id=".concat(el.id, "\" class=\"table__users__b--rows\">\n                        <div class=\"table__users__b--el\">").concat(_this.capitalizeFirstLetter(el.user_name), "</div>\n                        <div class=\"table__users__b--el i\">").concat(_this.capitalizeFirstLetter(el.user_role == 'both' ? 'Driver & Ryder' : el.user_role), "</div>\n                        <div class=\"table__users__b--el\">").concat(_this.capitalizeFirstLetter(el.user_city), "</div>\n                        <div class=\"table__users__b--el\">").concat(el.user_email, "</div>\n                        <div class=\"table__users__b--el\">").concat(el.user_phoneNumber, "</div>\n                    </a>\n                ");
+          return "\n                    <a href=\"/users.php?id=".concat(el.id, "\" class=\"table__users__b--rows\">\n                        <div class=\"table__users__b--el\">").concat(_this.capitalizeFirstLetter(el.name), "</div>\n                        <div class=\"table__users__b--el i\">").concat(_this.capitalizeFirstLetter(el.role == 'both' ? 'Driver & Ryder' : el.role), "</div>\n                        <div class=\"table__users__b--el\">").concat(_this.capitalizeFirstLetter(el.vehicle), "</div>\n                        <div class=\"table__users__b--el\">").concat(el.vehicle_no, "</div>\n                        <div class=\"table__users__b--el\">").concat(_this.capitalizeFirstLetter(el.city), "</div>\n                        <div class=\"table__users__b--el\">").concat(el.email, "</div>\n                        <div class=\"table__users__b--el\">").concat(el.phone_no, "</div>\n                    </a>\n                ");
         }).join('');
       }
       this.tableBody.innerHTML = markup;
@@ -22199,7 +22200,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60538" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56396" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
